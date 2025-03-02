@@ -32,5 +32,6 @@ sudo chown $USER:$USER $HOME/.kube/config
 
 
 ### Uninstall k3s ###
+```sh
 sudo /usr/local/bin/k3s-uninstall.sh
 ```
