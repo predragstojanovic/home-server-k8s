@@ -35,3 +35,11 @@ sudo chown $USER:$USER $HOME/.kube/config
 ```sh
 sudo /usr/local/bin/k3s-uninstall.sh
 ```
+
+
+### Delete TRAEFIK ###
+
+```sh
+kubectl delete deployment traefik -n kube-system
+kubectl delete service traefik -n kube-system
+```
