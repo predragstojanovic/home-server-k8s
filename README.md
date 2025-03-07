@@ -22,6 +22,29 @@ This repository contains scripts and configurations for installing ArgoCD on a K
 ### Quick Start
 
 Run the initialization script:
-
 ```bash
 ./init.sh
+
+
+
+### Troubleshooting
+
+
+Configure kubectl
+```sh
+mkdir -p $HOME/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+sudo chown $USER:$USER $HOME/.kube/config
+```
+
+### Uninstall k3s ###
+```sh
+sudo /usr/local/bin/k3s-uninstall.sh
+```
+
+### Delete TRAEFIK ###
+
+```sh
+kubectl delete deployment traefik -n kube-system
+kubectl delete service traefik -n kube-system
+```
