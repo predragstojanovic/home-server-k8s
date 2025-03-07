@@ -1,0 +1,74 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: home-assistant
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://pajikos.github.io/home-assistant-helm-chart/
+    targetRevision: 0.2.111
+    chart: home-assistant
+    helm:
+      values: |
+        image:
+          repository: ghcr.io/home-assistant/home-assistant
+          tag: stable
+          pullPolicy: IfNotPresent
+        
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: false
+          startup:
+            enabled: false
+        
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: traefik
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+            traefik.ingress.kubernetes.io/redirect-entry-point: https
+          hosts:
+            - host: ha.config.guru
+              paths:
+                - path: /
+                  pathType: Prefix
+
+        configuration:
+          enabled: true
+          forceInit: true
+          trustedProxies:
+            - 10.42.0.0/16
+            - 10.43.0.0/16
+            - 192.168.1.0/24
+            - 127.0.0.1
+            - ::1
+        
+        persistence:
+          enabled: true
+          config:
+            enabled: true
+        
+        extraVolumes:
+          - name: homeassistant-config
+            configMap:
+              name: homeassistant-config
+        
+        service:
+          type: ClusterIP
+          port: 8123
+          # annotations:
+          #   # Add a timestamp annotation to force recreation
+          #   timestamp: "2025-03-07-23-35"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: home-assistant
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

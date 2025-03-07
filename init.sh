@@ -28,9 +28,10 @@ kubectl apply -f argocd-ingress.yaml
 
 echo ""
 echo ""
+sleep 10
 
 # Retrieve the admin password
-ADMIN__PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+ADMIN_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
 sleep 10
 
@@ -42,7 +43,7 @@ echo "🔐 LOGIN CREDENTIALS 🔐"
 echo "┌─────────────┬────────────────────────────────┐"
 echo "│ Username    │ admin                          │"
 echo "├─────────────┼────────────────────────────────┤"
-echo "│ Password    │ $ADMIN__PASSWORD               │"
+echo "│ Password    │ $ADMIN_PASSWORD               │"
 echo "└─────────────┴────────────────────────────────┘"
 echo ""
 echo "⚠️  Important: Save these credentials securely. The initial admin"
