@@ -15,7 +15,6 @@ spec:
           repository: ghcr.io/home-assistant/home-assistant
           tag: stable
           pullPolicy: IfNotPresent
-        
         probes:
           liveness:
             enabled: true
@@ -23,7 +22,6 @@ spec:
             enabled: false
           startup:
             enabled: false
-        
         ingress:
           enabled: true
           annotations:
@@ -35,7 +33,6 @@ spec:
               paths:
                 - path: /
                   pathType: Prefix
-
         configuration:
           enabled: true
           forceInit: true
@@ -45,24 +42,27 @@ spec:
             - 192.168.1.0/24
             - 127.0.0.1
             - ::1
-        
         persistence:
           enabled: true
           config:
             enabled: true
-        
         extraVolumes:
           - name: homeassistant-config
             configMap:
               name: homeassistant-config
-        
+        initContainers:
+          - name: init-hacs
+            image: bash
+            command: ["bash", "-c", "cd /config && wget -O - https://get.hacs.xyz | bash -"]
+            volumeMounts:
+              - mountPath: /config
+                name: home-assistant
         service:
           type: ClusterIP
           port: 8123
           # annotations:
           #   # Add a timestamp annotation to force recreation
           #   timestamp: "2025-03-07-23-35"
-
   destination:
     server: https://kubernetes.default.svc
     namespace: home-assistant
