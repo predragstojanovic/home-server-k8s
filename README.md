@@ -9,7 +9,7 @@ This repository contains scripts and configurations for installing ArgoCD on a K
 - ArgoCD server deployed using Helm charts
 - Ingress configuration for accessing the ArgoCD UI
 - Simple initialization script for quick deployment
-- Home Automation via ArgoCD App
+- Home Automation via ArgoCD App 
 
 ## Prerequisites
 
